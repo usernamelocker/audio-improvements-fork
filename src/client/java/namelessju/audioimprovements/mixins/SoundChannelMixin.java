@@ -328,7 +328,7 @@ public abstract class SoundChannelMixin implements SoundChannelMixinAccessor
     @Override
     public float audioImprovements$getMaxDistance()
     {
-        if (audioImprovements$attenuationMultiplier < 0f) return Float.POSITIVE_INFINITY;
+        if (audioImprovements$attenuationMultiplier < 0f) return Float.MAX_VALUE;
         return Mth.equal(audioImprovements$attenuationMultiplier, 1f)
             ? audioImprovements$attenuationBefore
             : audioImprovements$attenuationOriginal * audioImprovements$attenuationMultiplier;

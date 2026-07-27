@@ -2,7 +2,7 @@ package namelessju.audioimprovements.gui.components;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.StringWidget;
@@ -92,14 +92,14 @@ public class GuiList extends ContainerObjectSelectionList<GuiList.Entry>
         }
 
         @Override
-        public void renderContent(GuiGraphics guiGraphics, int index, int y, boolean selected, float partialTick)
+        public void extractContent(GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, boolean selected, float partialTick)
         {
             int x = this.screen.width / 2 - 155;
             int entryY = getY();
             for (AbstractWidget abstractWidget : this.children)
             {
                 abstractWidget.setPosition(x, entryY + yOffset);
-                abstractWidget.render(guiGraphics, index, y, partialTick);
+                abstractWidget.extractRenderState(guiGraphicsExtractor, mouseX, mouseY, partialTick);
                 x += abstractWidget.getWidth() + 10;
             }
         }

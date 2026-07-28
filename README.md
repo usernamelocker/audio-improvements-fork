@@ -1,8 +1,15 @@
-# Audio Improvements - Fabric 1.21.11 Port
+# Audio Improvements - Fabric Port
 
-This is a **community-maintained port** of [NamelessJu's Audio Improvements Mod](https://github.com/NamelessJu/MC-Audio-Improvements-Mod) from Minecraft **1.20.1 → 1.21.11** (Fabric).
+A **community-maintained port** of [NamelessJu's Audio Improvements Mod](https://github.com/NamelessJu/MC-Audio-Improvements-Mod) for modern Minecraft versions (Fabric).
 
 A client-side Minecraft mod that improves various audio systems.
+
+## Supported Versions
+
+| Minecraft | Branch | Release |
+|---|---|---|
+| **1.21.11** | [`1.21.11-fabric`](https://github.com/usernamelocker/audio-improvements-fork/tree/1.21.11-fabric) | [`v1.3.2-1.21.11-fabric`](https://github.com/usernamelocker/audio-improvements-fork/releases/tag/v1.3.2-1.21.11-fabric) |
+| **26.1.2** | [`26.1.2-fabric`](https://github.com/usernamelocker/audio-improvements-fork/tree/26.1.2-fabric) | [`v1.3.2-26.1.2-fabric`](https://github.com/usernamelocker/audio-improvements-fork/releases/tag/v1.3.2-26.1.2-fabric) |
 
 ## Features
 
@@ -12,11 +19,11 @@ A client-side Minecraft mod that improves various audio systems.
 - **Mono Audio Controls** — per-category toggle for downmixing sounds to mono
 - **Music Frequency Control** — customize how often background music plays
 - **Stereo Spatialization Fix** — fixes incorrect stereo panning
-- **Customizable Music Disc Range** — adjust the audible range of jukeboxes
+- **Customizable Music Disc Range** — adjust the audible range of jukeboxes (supports global range)
 
 ## Changes from Original v1.3.2
 
-This port updates all code to work with Minecraft 1.21.11's refactored rendering and audio systems. Default config values are set to **off** for features that change gameplay behavior:
+Default config values are set to **off** for features that change gameplay behavior:
 
 | Setting | Original Default | Port Default |
 |---|---|---|
@@ -33,6 +40,8 @@ This port updates all code to work with Minecraft 1.21.11's refactored rendering
 ```
 
 The built jar will be in `build/libs/`.
+
+Requirements depend on the target version (see branch READMEs).
 
 ## License
 

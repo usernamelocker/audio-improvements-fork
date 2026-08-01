@@ -9,7 +9,7 @@
         "CameraTypeMixin",
         "ClientLevelMixin",
         "ClientPacketListenerMixin",
-        "LevelRendererMixin",
+        "SimpleSoundInstanceMixin",
         "MinecraftMixin",
         "MusicManagerMixin",
         "SoundBufferMixin",

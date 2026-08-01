@@ -169,16 +169,24 @@ public abstract class SoundEngineMixin
             float volumeMultiplier = AudioImprovements.getInstance().musicVolumeMultiplier;
             if (volumeMultiplier != 1f)
             {
-                float sourceVolume = gainBySource.getOrDefault(soundSource, 0f);
+                float sourceVolume = gainBySource.getFloat(soundSource);
+                float optionsVolume = Minecraft.getInstance().options.getFinalSoundSourceVolume(soundSource);
                 // Note: very tiny non-zero min value to stop this Minecraft
                 // version from automatically stopping the sound completely
-                cir.setReturnValue(Mth.clamp(baseVolume * sourceVolume * volumeMultiplier, 0.00001f, 1f));
+                cir.setReturnValue(Mth.clamp(
+                    Mth.clamp(baseVolume, 0f, 1f)
+                        * Mth.clamp(optionsVolume, 0f, 1f)
+                        * Mth.clamp(sourceVolume, 0f, 1f)
+                        * volumeMultiplier,
+                    0.00001f, 1f
+                ));
                 
                 if (AudioImprovements.LOGGER.isDebugEnabled())
                 {
-                    AudioImprovements.LOGGER.debug("Calculated faded music volume as {} (base: {}, source: {}, multiplier: {})",
+                    AudioImprovements.LOGGER.debug("Calculated faded music volume as {} (base: {}, options: {}, source: {}, multiplier: {})",
                         cir.getReturnValueF(),
                         baseVolume,
+                        optionsVolume,
                         sourceVolume,
                         volumeMultiplier
                     );

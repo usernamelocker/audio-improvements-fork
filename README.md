@@ -29,6 +29,7 @@ Default config values are set to **off** for features that change gameplay behav
 |---|---|---|
 | Fade music on disc/note block | ON | OFF |
 | Fadeout duration | 2s | 0s (instant) |
+| Fadein duration | 5s | 0s (instant) |
 | Sound speed (thunder) | 100 blk/s | OFF |
 | Sound speed (explosions) | 100 blk/s | OFF |
 | Doppler effect intensity | 1.0 | OFF |

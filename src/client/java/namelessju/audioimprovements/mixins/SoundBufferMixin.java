@@ -24,14 +24,17 @@ public class SoundBufferMixin implements SoundBufferMixinAccessor
     @Override
     public void audioimprovements$convertStereoToMono()
     {
-        if (data == null || format.getChannels() != 2) return;
+        if (data == null || format.getChannels() != 2
+            || format.getSampleSizeInBits() != 16
+            || !AudioFormat.Encoding.PCM_SIGNED.equals(format.getEncoding())) return;
         
-        data.order(ByteOrder.LITTLE_ENDIAN);
+        ByteOrder byteOrder = format.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN;
+        data.order(byteOrder);
         int samples = data.remaining() / 2;
         int frames = samples / 2;
         
         ByteBuffer mono = BufferUtils.createByteBuffer(frames * 2);
-        mono.order(ByteOrder.LITTLE_ENDIAN);
+        mono.order(byteOrder);
         for (int i = 0; i < frames; i++)
         {
             short left = data.getShort();
@@ -43,7 +46,7 @@ public class SoundBufferMixin implements SoundBufferMixinAccessor
         data = mono;
         format = new AudioFormat(
             format.getEncoding(), format.getSampleRate(), format.getSampleSizeInBits(),
-            1, format.getFrameSize(), format.getFrameRate(), format.isBigEndian(),
+            1, 2, format.getFrameRate(), format.isBigEndian(),
             format.properties()
         );
     }

@@ -29,7 +29,7 @@ public class WidgetFactory
     public static Button buildSubScreenButton(int x, int y, int width, int height, Component text, Screen sourceScreen, Function<Screen, Screen> subScreenFactory)
     {
         return Button.builder(Component.translatable("audioimprovements.gui.subScreenButtonFormat", text),
-                button -> Minecraft.getInstance().setScreen(subScreenFactory.apply(sourceScreen))
+                button -> Minecraft.getInstance().gui.setScreen(subScreenFactory.apply(sourceScreen))
             )
             .bounds(x, y, width, height)
             .build();

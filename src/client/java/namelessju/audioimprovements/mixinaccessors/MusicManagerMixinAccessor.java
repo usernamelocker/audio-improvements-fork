@@ -5,6 +5,6 @@ public interface MusicManagerMixinAccessor
     void audioImprovements$afterJoinLevel();
     void audioImprovements$beforeDisconnect();
     
-    void audioImprovements$handleTickNextSongDelayOrd1(int newDelay);
-    void audioImprovements$handleTickNextSongDelayOrd2(int newDelay);
+    void audioImprovements$handleDelayAfterTrackEnds(int newDelay);
+    void audioImprovements$handleTickDelayClamp(int newDelay);
 }

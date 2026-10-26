@@ -66,13 +66,14 @@ public abstract class MusicManagerMixin implements MusicManagerMixinAccessor
         at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/client/sounds/MusicManager;nextSongDelay:I",
-            ordinal = 1,
+            // After the current track finishes (following the no-music and replacement branches).
+            ordinal = 2,
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void audioImprovements$tickSetNextSongDelayOrd1(MusicManager musicManager, int nextSongDelay)
+    private void audioImprovements$setDelayAfterTrackEnds(MusicManager musicManager, int nextSongDelay)
     {
-        audioImprovements$handleTickNextSongDelayOrd1(nextSongDelay);
+        audioImprovements$handleDelayAfterTrackEnds(nextSongDelay);
     }
     
     @Redirect(
@@ -80,17 +81,18 @@ public abstract class MusicManagerMixin implements MusicManagerMixinAccessor
         at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/client/sounds/MusicManager;nextSongDelay:I",
-            ordinal = 2,
+            // The per-tick clamp to the situational music's maximum delay.
+            ordinal = 3,
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void audioImprovements$tickSetNextSongDelayOrd2(MusicManager musicManager, int nextSongDelay)
+    private void audioImprovements$clampTickDelay(MusicManager musicManager, int nextSongDelay)
     {
-        audioImprovements$handleTickNextSongDelayOrd2(nextSongDelay);
+        audioImprovements$handleTickDelayClamp(nextSongDelay);
     }
     
     @Override @Unique
-    public void audioImprovements$handleTickNextSongDelayOrd1(int newDelay)
+    public void audioImprovements$handleDelayAfterTrackEnds(int newDelay)
     {
         // skip unnecessary duplicate statement for custom frequency
         if (audioImprovements$shouldApplyCustomFrequency()) return;
@@ -98,7 +100,7 @@ public abstract class MusicManagerMixin implements MusicManagerMixinAccessor
     }
     
     @Override @Unique
-    public void audioImprovements$handleTickNextSongDelayOrd2(int newDelay)
+    public void audioImprovements$handleTickDelayClamp(int newDelay)
     {
         if (audioImprovements$shouldApplyCustomFrequency())
         {
@@ -106,8 +108,8 @@ public abstract class MusicManagerMixin implements MusicManagerMixinAccessor
             if ((nextSongDelay >= 0 && nextSongDelay <= config.musicFrequencyMaxTicks.getValue())
                 && (currentMusic == null || nextSongDelay >= config.musicFrequencyMinTicks.getValue()))
             {
-                // prevent Mojank code from heavily skewing
-                // the next music towards playing early
+                // Preserve the custom countdown instead of applying
+                // the situational music maximum delay.
                 return;
             }
             

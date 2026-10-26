@@ -68,7 +68,7 @@ public abstract class SoundEngineMixin
         if (queuedSounds.containsKey(soundInstance)) return;
         
         int delay = Mth.floor(
-            Minecraft.getInstance().gameRenderer.getMainCamera().position().distanceTo(
+            Minecraft.getInstance().gameRenderer.mainCamera().position().distanceTo(
                 new Vec3(soundInstance.getX(), soundInstance.getY(), soundInstance.getZ())
             )
             * 1f/soundSpeed * 20f

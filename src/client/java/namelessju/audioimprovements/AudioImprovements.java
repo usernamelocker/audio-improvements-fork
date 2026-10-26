@@ -91,7 +91,7 @@ public abstract class AudioImprovements
     
     public boolean shouldFadeMusic()
     {
-        Vec3 listenerPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        Vec3 listenerPos = Minecraft.getInstance().gameRenderer.mainCamera().position();
         for (Channel channel : musicBlockChannels)
         {
             if (!channel.playing()) continue;

@@ -19,7 +19,8 @@ public abstract class AL10Mixin
     private static void audioImprovements$alSourcefv(int source, int param, FloatBuffer values, CallbackInfo ci)
     {
         if (param != AL10.AL_POSITION) return;
-        AudioImprovements.getInstance().checkSourcePositionUpdate(source, values.get(0), values.get(1), values.get(2));
+        int position = values.position();
+        AudioImprovements.getInstance().checkSourcePositionUpdate(source, values.get(position), values.get(position + 1), values.get(position + 2));
     }
     
     @Inject(method = "alSourcefv(II[F)V", at = @At("HEAD"), remap = false)

@@ -1,23 +1,24 @@
 package namelessju.audioimprovements.config;
 
-import com.google.common.base.Charsets;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.internal.Streams;
-import com.google.gson.stream.JsonWriter;
 import namelessju.audioimprovements.AudioImprovements;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class Config implements Iterable<ConfigEntry<?>>
 {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public final File file;
     
     private final List<ConfigEntry<?>> entries = new ArrayList<>();
@@ -41,24 +42,14 @@ public abstract class Config implements Iterable<ConfigEntry<?>>
             return;
         }
         
-        Reader reader;
-        try
-        {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.UTF_8));
-        }
-        catch (FileNotFoundException e)
-        {
-            AudioImprovements.LOGGER.error("Error while loading config: File not found");
-            return;
-        }
         JsonElement json;
-        try
+        try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8))
         {
             json = JsonParser.parseReader(reader);
         }
         catch (Exception e)
         {
-            AudioImprovements.LOGGER.error("Error while loading config: Failed to parse JSON");
+            AudioImprovements.LOGGER.error("Error while reading or parsing config {}", file, e);
             return;
         }
         
@@ -77,7 +68,8 @@ public abstract class Config implements Iterable<ConfigEntry<?>>
             if (element != null)
             {
                 if (entry.loadFromJsonElement(element)) continue;
-                else logInvalidEntryValue(entry, element.toString());
+                logInvalidEntryValue(entry, element.toString());
+                saveRequired = true;
             }
             else if (entry.updateFormat(jsonObject))
             {
@@ -112,25 +104,17 @@ public abstract class Config implements Iterable<ConfigEntry<?>>
             json.add(entry.key, entry.saveToJsonElement());
         }
         
-        Writer writer = null;
         try
         {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), Charsets.UTF_8));
-            JsonWriter jsonWriter = new JsonWriter(writer);
-            jsonWriter.setIndent("    ");
-            Streams.write(json, jsonWriter);
-        }
-        catch (FileNotFoundException e)
-        {
-            AudioImprovements.LOGGER.error("Error while saving config: Invalid or unwritable file");
+            Files.createDirectories(file.toPath().toAbsolutePath().getParent());
+            try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8))
+            {
+                GSON.toJson(json, writer);
+            }
         }
         catch (IOException e)
         {
-            AudioImprovements.LOGGER.error("Error while saving config: Failed to write file");
-        }
-        finally
-        {
-            IOUtils.closeQuietly(writer);
+            AudioImprovements.LOGGER.error("Error while saving config {}", file, e);
         }
     }
     

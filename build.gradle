@@ -38,6 +38,19 @@ dependencies {
 
     implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
     compileOnly "maven.modrinth:vinurl:${project.vinurl_version}"
+
+    testImplementation sourceSets.client.output
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+configurations {
+    testImplementation.extendsFrom clientImplementation
+    testRuntimeOnly.extendsFrom clientRuntimeOnly
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
 
 processResources {
@@ -45,11 +58,12 @@ processResources {
     var replaceProperties = [
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
+            minecraft_version: minecraft_version, loader_version: loader_version,
     ]
     inputs.properties replaceProperties
 
 	filesMatching("fabric.mod.json") {
-		expand inputs.properties
+		expand replaceProperties
 	}
 }
 

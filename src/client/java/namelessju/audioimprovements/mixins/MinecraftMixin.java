@@ -17,7 +17,7 @@ public abstract class MinecraftMixin
         AudioImprovements mod = AudioImprovements.getInstance();
         if (mod.openConfigNextTick)
         {
-            Minecraft.getInstance().setScreen(mod.createConfigScreen(null));
+            Minecraft.getInstance().gui.setScreen(mod.createConfigScreen(null));
             mod.openConfigNextTick = false;
         }
     }

@@ -14,7 +14,7 @@ public class VinURLSoundManagerMixin
         method = "playSound",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/sounds/SoundManager;play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V"
+            target = "Lnet/minecraft/client/sounds/SoundManager;play(Lnet/minecraft/client/resources/sounds/SoundInstance;)Lnet/minecraft/client/sounds/SoundEngine$PlayResult;"
         ),
         index = 0
     )

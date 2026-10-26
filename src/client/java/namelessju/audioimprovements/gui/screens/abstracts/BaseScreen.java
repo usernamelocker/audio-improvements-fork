@@ -42,7 +42,7 @@ public abstract class BaseScreen extends Screen
     @Override
     public void onClose()
     {
-        minecraft.setScreen(parentScreen);
+        minecraft.gui.setScreen(parentScreen);
     }
     
     protected final MutableComponent getTranslatableComponent(String subKey)
